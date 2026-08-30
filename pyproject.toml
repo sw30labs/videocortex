@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "videocortex"
+version = "0.1.0"
+description = "Drop a clip. See which cortical regions it would drive in an average brain. Local pipeline around Meta TRIBE v2."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Nicolas Cravino" }]
+keywords = ["fmri", "brain-encoding", "neuroscience", "tribe", "fsaverage5"]
+
+# Deliberately light. The renderer only needs the neuroimaging stack, so
+# `videocortex draw` works on a machine that has never seen torch.
+dependencies = [
+  "numpy>=2.1",
+  "nilearn>=0.11",
+  "nibabel>=5.1",
+  "matplotlib>=3.8",
+  "scipy>=1.11",
+  # Direct use for PIP label/ribbon blits (matplotlib only pulls it in
+  # transitively, and code that imports PIL directly shouldn't bet on that).
+  "pillow>=10",
+  # Small, and it's what lets `doctor` tell you about the gated Llama repo
+  # *before* you commit to installing the heavy predict extra.
+  "huggingface_hub>=0.30",
+]
+
+[project.optional-dependencies]
+# The half that actually runs the model. Pulls torch and ~15 GB of frozen
+# encoder weights on first use. Kept separate on purpose.
+predict = [
+  "tribev2 @ git+https://github.com/facebookresearch/tribev2.git",
+  "torch>=2.5.1,<2.7",
+]
+dev = [
+  "pytest>=8.0",
+  "pytest-cov",
+]
+
+[project.scripts]
+videocortex = "videocortex.cli:main"
+
+[project.urls]
+Upstream = "https://github.com/facebookresearch/tribev2"
+Weights = "https://huggingface.co/facebook/tribev2"
+Paper = "https://arxiv.org/abs/2605.04326"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+videocortex = ["web/static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = [
+  "slow: needs network or the full model stack",
+]
