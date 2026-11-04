@@ -15,17 +15,17 @@ keywords = ["fmri", "brain-encoding", "neuroscience", "tribe", "fsaverage5"]
 # Deliberately light. The renderer only needs the neuroimaging stack, so
 # `videocortex draw` works on a machine that has never seen torch.
 dependencies = [
-  "numpy>=2.1",
-  "nilearn>=0.11",
-  "nibabel>=5.1",
-  "matplotlib>=3.8",
-  "scipy>=1.11",
+  "numpy==2.5.4",
+  "nilearn==0.14.1",
+  "nibabel==5.4.2",
+  "matplotlib==3.11.2",
+  "scipy==1.18.1",
   # Direct use for PIP label/ribbon blits (matplotlib only pulls it in
   # transitively, and code that imports PIL directly shouldn't bet on that).
-  "pillow>=10",
+  "pillow==13.0.0",
   # Small, and it's what lets `doctor` tell you about the gated Llama repo
   # *before* you commit to installing the heavy predict extra.
-  "huggingface_hub>=0.30",
+  "huggingface_hub==2.4.0",
 ]
 
 [project.optional-dependencies]
@@ -33,11 +33,11 @@ dependencies = [
 # encoder weights on first use. Kept separate on purpose.
 predict = [
   "tribev2 @ git+https://github.com/facebookresearch/tribev2.git",
-  "torch>=2.5.1,<2.7",
+  "torch==2.6.0",
 ]
 dev = [
-  "pytest>=8.0",
-  "pytest-cov",
+  "pytest==9.2.0",
+  "pytest-cov==7.1.0",
 ]
 
 [project.scripts]
